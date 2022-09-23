@@ -1,17 +1,17 @@
-# vue3_element
-## test-task001
-## Project setup
+# vue3_element - test-task001
+### Project setup
 ```
+ backend for requests in server folder
+
 npm install
 ```
 
-### Compiles and hot-reloads for development
+ Compiles and hot-reloads for development
 ```
 npm run serve
 ```
-backend for requests in server folder
 
-### Compiles and minifies for production
+ Compiles and minifies for production
 ```
 npm run build
 ```
