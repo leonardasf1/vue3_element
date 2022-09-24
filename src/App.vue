@@ -1,3 +1,9 @@
+<script setup lang="ts">
+// This starter template is using Vue 3 <script setup> SFCs
+// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import HeaderCom from '@/components/HeaderCom.vue'
+</script>
+
 <template>
   <el-container>
     <header-com/>
@@ -5,28 +11,8 @@
   </el-container>
 </template>
 
-<script>
-import HeaderCom from '@/components/HeaderCom'
-
-export default {
-  name: 'App',
-  components: {
-    HeaderCom
+<style lang="scss">
+  .el-container {
+    display: block;
   }
-}
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-* { margin: 0; padding: 0; }
-
-.el-container {
-  display: block;
-}
 </style>

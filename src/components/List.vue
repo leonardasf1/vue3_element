@@ -1,3 +1,41 @@
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import type { Ref } from 'vue'
+
+  const props = defineProps<{
+    tabs?: Array
+    values?: Array
+  }>()
+
+  const chart: Ref<Array> = ref([])
+
+  function handleC( tab: object, values: Array ): void {
+
+    chart.value = tab
+
+    chart.value.de_refs.forEach(de_ref => {
+
+      de_ref.values = []
+      de_ref.times = []
+
+      values.forEach(value => {
+
+        de_ref.times.push( value.timepoint )
+
+        for ( let v_at of value.values_at_timepoint ) {
+
+          if ( v_at.id == de_ref.id ) {
+
+            de_ref.values.push( v_at.value )
+            break
+          }
+        }
+      })
+    })
+  }
+
+</script>
+
 <template>
 
   <el-row class="tac" style="min-height: calc(100vh - 60px); flex-wrap: nowrap;">
@@ -18,7 +56,7 @@
     </el-menu>
 
     <ul style="width: 100%; padding: 2rem;">
-      <li v-for="de_ref in this.chart.de_refs">
+      <li v-for="de_ref in chart.de_refs">
 
         <h4>{{de_ref.id}} . {{de_ref.name}}</h4>
         <span>{{de_ref.description}}</span>
@@ -36,63 +74,12 @@
       </li>
     </ul>
 
-    <h3>{{this.chart.description}}</h3>
+    <h3>{{chart.description}}</h3>
 
   </el-row>
 </template>
 
-<script>
-export default {
-  name: 'List',
-  components: {},
-  props: {
-    tabs: {
-      requered: true
-    },
-    values: {
-      requered: true,
-      default: []
-    }
-  },
-  data() {
-    return {
-      chart: {
-        type: Array,
-        requered: true,
-        default: []
-      }
-    }
-  },
-  methods: {
-    handleC (tab, values) {
-
-      this.chart = tab
-
-      this.chart.de_refs.forEach(de_ref => {
-
-        de_ref.values = []
-        de_ref.times = []
-
-        values.forEach(value => {
-
-          de_ref.times.push( value.timepoint )
-
-          for ( let v_at of value.values_at_timepoint ) {
-
-            if ( v_at.id == de_ref.id ) {
-
-              de_ref.values.push( v_at.value )
-              break
-            }
-          }
-        })
-      })
-    }
-  }
-}
-</script>
-
-<style scoped>
+<style lang="scss" scoped>
 
   h3 {
     position: absolute;
@@ -106,9 +93,10 @@ export default {
   }
   .time_values {
     display: flex;
-  }
-  .time_values > ul {
-    padding: 2rem;
+
+    > ul {
+      padding: 2rem;
+    }
   }
 
 </style>

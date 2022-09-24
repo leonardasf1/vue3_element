@@ -1,3 +1,7 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
   <el-menu
     class="el-menu-demo"
@@ -15,19 +19,3 @@
     </el-menu-item>
   </el-menu>
 </template>
-
-<script>
-
-export default {
-  name: 'header-com',
-  components: {},
-  data() {
-    return {}
-  },
-  methods: {}
-}
-</script>
-
-<style scoped>
-  
-</style>
