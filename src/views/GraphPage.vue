@@ -3,15 +3,15 @@
   import type { Ref } from 'vue'
   import List from '@/components/List.vue'
 
-  const tabs: Ref<Array> = ref([])
-  const values: Ref<Array> = ref([])
+  const tabs: Ref<Array<any>> = ref([])
+  const values: Ref<Array<any>> = ref([])
 
-  async function req_APIv1(): void {
+  async function req_APIv1() {
     const res = await fetch("http://localhost:6006/APIv1/tabs")
     .then(response => response.json())
     tabs.value = res
   }
-  async function req_APIv0(): void {
+  async function req_APIv0() {
     const res = await fetch("http://localhost:6006/APIv0/data/1")
     .then(response => response.json())
     values.value = res

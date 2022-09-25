@@ -3,22 +3,22 @@
   import type { Ref } from 'vue'
 
   const props = defineProps<{
-    tabs?: Array
-    values?: Array
+    tabs?: Array<any>
+    values?: any
   }>()
 
-  const chart: Ref<Array> = ref([])
+  const chart: Ref = ref([])
 
-  function handleC( tab: object, values: Array ): void {
+  function handleC( tab: object, values: Array<any> ): void {
 
     chart.value = tab
 
-    chart.value.de_refs.forEach(de_ref => {
+    chart.value.de_refs.forEach(( de_ref: any ) => {
 
       de_ref.values = []
       de_ref.times = []
 
-      values.forEach(value => {
+      values.forEach(( value: any ) => {
 
         de_ref.times.push( value.timepoint )
 

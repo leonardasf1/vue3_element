@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import legacy from '@vitejs/plugin-legacy'
 import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -14,6 +15,16 @@ export default defineConfig({
     }),
     Components({
       resolvers: [ElementPlusResolver()]
+    }),
+    legacy({
+      targets: [
+        "> 1%",
+        "last 2 versions",
+        "firefox >= 44",
+        "chrome >= 103",
+        "not dead",
+        "not ie 11"
+      ]
     })
   ],
   resolve: {
