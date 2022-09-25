@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
   const props = defineProps<{
-    chart: any
+    series: Array<any>
     xAxis: any
   }>()
 
@@ -10,10 +10,9 @@
 <template>
 
     <ul style="width: 100%; padding: 2rem;">
-      <li v-for="de_ref in chart.de_refs">
+      <li v-for="item in series">
 
-        <h4>{{de_ref.id}} . {{de_ref.name}}</h4>
-        <span>{{de_ref.description}}</span>
+        <h4>{{item.name}}</h4>
         <div class="time_values">
 
           <ul><label>отметки времени (мс)</label>
@@ -21,29 +20,17 @@
           </ul>
 
           <ul><label>значения</label>
-            <li v-for="v_at in de_ref.values">{{v_at}}</li>
+            <li v-for="v_at in item.data">{{v_at}}</li>
           </ul>
         </div>
 
       </li>
     </ul>
 
-    <h3>{{chart.description}}</h3>
-
 </template>
 
 <style lang="scss" scoped>
 
-  h3 {
-    position: absolute;
-    right: 19px;
-    top: -42px;
-    z-index: 1;
-    color: white;
-  }
-  @media (max-width: 730px) {
-    h3 { display: none }
-  }
   .time_values {
     display: flex;
 

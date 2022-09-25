@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 const { charts } = require('./APIv1/tabs.json');
-const { values } = require('./APIv0/data.json');
+const data = require('./APIv0/data.json');
 const port = 6006;
 
 app.get('/', (req, res) => {
@@ -15,7 +15,7 @@ app.get('/APIv1/tabs', (req, res) => {
 })
 
 app.get('/APIv0/data/1', (req, res) => {
-  res.send(JSON.stringify(values))
+  res.send(JSON.stringify(data))
 })
 
 app.listen(port, () => {
