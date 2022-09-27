@@ -2,6 +2,8 @@
 
 # test-task001
 
+- страница по адресу /graph/1?tab=2 показывает второй блок с заглушкой под график для первого набора данных
+
 - Приложение корректно работает в Google Chrome версии 103-105, Firefox 44 и выше за счёт [@vitejs/plugin-legacy](https://www.npmjs.com/package/@vitejs/plugin-legacy)
 - Firefox 44 - только при отключении безопасного режима.
 
@@ -12,8 +14,6 @@
 - Структура выходных данных: легенда графика (legend), представляющая собой массив наименований отображаемых на графике показателей, объект, задающий массив временных значений по оси X (xAxis).
 
 - Возникли затруднения с генерацией массива значений по оси Y для каждой из линий на графике (series). (в работе) Взамен был создан chart - объект с группами показателей со значениями по оси Y , наименованиями и id.
-
-- страница по адресу /graph/1?tab=2 не показывает второй блок с заглушкой под график для первого набора данных,  (в работе)
 
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 

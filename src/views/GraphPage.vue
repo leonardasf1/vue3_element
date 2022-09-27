@@ -1,15 +1,17 @@
 <script setup lang="ts">
 
-  import { ref, onMounted } from 'vue'
   import type { Ref } from 'vue'
+  import { ref, onMounted } from 'vue'
+  import { useRoute } from 'vue-router'
+
   import TabMenu from '@/components/TabMenu.vue'
   import List from '@/components/List.vue'
   import Graph from '@/components/Graph.vue'
 
 // ---------------------------------
 
-  const charts: Ref<Array<any>> = ref([])
-  const values: Ref<Array<object>> = ref([])
+  const charts: Ref<Array<Ichart>> = ref([])
+  const values: Ref<Array<Ivalue>> = ref([])
   const data_elements: Ref<Array<object>> = ref([])
 
   async function req_APIv1() {
@@ -23,8 +25,24 @@
     values.value = res.values
     data_elements.value = res.data_elements
     transformator()
-  }
 
+  }
+  onMounted(() => {
+    req_APIv1()
+    req_APIv0().then(() => pathHandler())
+  })
+
+// ---------------------------------
+
+  const route = useRoute()
+
+  function pathHandler() :void {
+    const path: any = route.path.split("/")[2]
+    const block = route.query.tab
+    if (path) {
+      handleC(charts.value[path - 1], block)
+    }
+  }
 // ---------------------------------
 
   const legend: Ref = ref({ "data": [] }) // массив наименований отображаемых на графике показателей
@@ -33,7 +51,7 @@
 
   function transformator(): void {
 
-    values.value.forEach(( value: any ) => {
+    values.value.forEach(( value: Ivalue ) => {
       xAxis.value.data.push( value.timepoint )
     })
     data_elements.value.forEach(( element_data: any ) => {
@@ -55,13 +73,35 @@
 
   const chart: Ref = ref({}) // объект, задающий массив значений по оси Y для каждой из линий на графике
 
-  function handleC( tab: object): void {
-    chart.value = tab
+  interface Ichart {
+    id: string
+    name: string
+    description?: string
+    de_refs: [
+      {
+        id: string
+        name: string
+        description?: string
+        values: number[]
+      }
+    ]
+  }
+  interface Ivalue {
+    timepoint: number
+    values_at_timepoint: [
+      {
+        id: string
+        value: number
+      }
+    ]
+  }
+  function handleC( tab: Ichart, block?: any): void {
+    const charT: Ichart = tab
 
-    chart.value.de_refs.forEach(( de_ref: any ) => {
+    for ( let de_ref of charT.de_refs ) {
       de_ref.values = []
 
-        values.value.forEach(( value: any ) => {
+      values.value.forEach(( value: Ivalue ) => {
 
         for ( let v_at of value.values_at_timepoint ) {
           if ( v_at.id == de_ref.id ) {
@@ -70,13 +110,14 @@
           }
         }
       })
-    })
+    }
+    chart.value = {
+      "id": charT.id,
+      "name": charT.name,
+      "description": charT.description,
+      "de_refs": block ? new Array(charT.de_refs[block - 1]) : charT.de_refs
+    }
   }
-
-  onMounted(() => {
-    req_APIv1()
-    req_APIv0()
-  })
 
 </script>
 
