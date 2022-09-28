@@ -6,7 +6,6 @@
 
   import TabMenu from '@/components/TabMenu.vue'
   import List from '@/components/List.vue'
-  import Graph from '@/components/Graph.vue'
 
 // ---------------------------------
 
@@ -47,26 +46,37 @@
 
   const legend: Ref = ref({ "data": [] }) // массив наименований отображаемых на графике показателей
   const xAxis:  Ref = ref({ "data": [] }) // объект, задающий массив временных значений по оси X
-  // const series:  Ref = ref({ [] }) // массив значений по оси Y для каждой из линий на графике
+  const series:  Ref = ref([]) // массив значений по оси Y для каждой из линий на графике
 
   function transformator(): void {
 
     values.value.forEach(( value: Ivalue ) => {
       xAxis.value.data.push( value.timepoint )
     })
+
+    let i = 0
+    const serieS: Array<Iseries> = []
+
     data_elements.value.forEach(( element_data: any ) => {
       legend.value.data.push( element_data.name )
-      // values.value.forEach(( value: any ) => {
-      //   for ( let v_at of value.values_at_timepoint ) {
-      //     if ( v_at.id == element_data.id ) {
-      //       series.value.data[i].name = element_data.name
-      //       series.value.data[i].data.push( v_at.value )
-      //       i++
-      //       break
-      //     }
-      //   }
-      // })
+
+      values.value.forEach(( value: Ivalue ) => {
+        for ( let v_at of value.values_at_timepoint ) {
+          if ( v_at.id == element_data.id ) {
+            if ( !serieS[i] || serieS[i].name !== element_data.name ) {
+              serieS.push({
+                "name": element_data.name,
+                "data": []
+              })
+            }
+            serieS[i].data.push( v_at.value )
+            break
+          }
+        }
+      })
+      i++
     })
+    series.value = serieS
   }
 
 // ---------------------------------
@@ -94,6 +104,10 @@
         value: number
       }
     ]
+  }
+  interface Iseries {
+    name: string
+    data: number[]
   }
   function handleC( tab: Ichart, block?: any): void {
     const charT: Ichart = tab
@@ -123,17 +137,18 @@
 
 <template>
   <el-row class="tac" style="min-height: calc(100vh - 60px); flex-wrap: nowrap;">
-
-    <tab-menu
-      :charts="charts"
-      :handleC="handleC"
-    />
+    <div class="">
+      <tab-menu
+        :charts="charts"
+        :handleC="handleC"
+      />
+    </div>
 
     <list
       :chart="chart"
       :xAxis="xAxis"
+      :series="series"
     />
-    <!-- <Graph :series="series" :xAxis="xAxis" /> -->
 
   </el-row>
 </template>

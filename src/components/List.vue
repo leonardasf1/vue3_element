@@ -1,15 +1,24 @@
 <script setup lang="ts">
+  import Graph from '@/components/Graph.vue'
 
   const props = defineProps<{
     chart: any
     xAxis: any
+    series: Array<any>
   }>()
 
 </script>
 
 <template>
-
-    <ul style="width: 100%; padding: 2rem;">
+    <Graph
+      v-if="chart.de_refs == undefined"
+      :series="series"
+      :xAxis="xAxis"
+    />
+    <ul
+      v-if="chart.de_refs != undefined"
+      style="width: 100%; padding: 2rem;"
+    >
       <li v-for="de_ref in chart.de_refs">
 
         <h4>{{de_ref.id}} . {{de_ref.name}}</h4>
