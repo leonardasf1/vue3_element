@@ -1,4 +1,4 @@
-export default const = {
+export const data = {
   "values": [
     {
       "timepoint": 1662967680,

@@ -1,4 +1,4 @@
-export default const = {
+export const charts = {
   "charts": [
     {
       "id": 101,

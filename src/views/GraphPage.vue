@@ -4,9 +4,9 @@
   import { ref, onMounted } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import { req_APIv1, req_APIv0 } from '@/realizations/requires.ts'
-  import { getChartValues, Ichart, Ivalue } from '@/realizations/getChartValues.ts'
-  import { getSeries } from '@/realizations/getSeries.ts'
+  import { req_APIv1, req_APIv0 } from '../realizations/requires'
+  import { getChartValues, Ichart, Ivalue } from '../realizations/getChartValues'
+  import { getSeries } from '../realizations/getSeries'
 
   import TabMenu from '@/components/TabMenu.vue'
   import List from '@/components/List.vue'
@@ -16,9 +16,8 @@
   const charts: Ref<Array<Ichart>> = ref([])
 
   async function getCharts(): Promise<void> {
-    charts.value = await req_APIv1()
-
-    console.log(charts.value)
+    const res = await req_APIv1()
+    charts.value = res
   }
 
   const values: Ref<Array<Ivalue>> = ref([])
@@ -28,7 +27,6 @@
     const res = await req_APIv0()
     values.value = res.values
     data_elements.value = res.data_elements
-    console.log(values.value)
     transformator()
   }
   onMounted(() => {
