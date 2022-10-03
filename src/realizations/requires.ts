@@ -1,5 +1,5 @@
-import { charts } from './APIv1/tabs.js'
-import { data } from './APIv0/data.js'
+import { charts } from './APIv1/tabs'
+import { data } from './APIv0/data'
 
 export async function req_APIv1() {
   // return fetch("http://localhost:6006/APIv1/tabs")
