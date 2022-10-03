@@ -15,6 +15,7 @@
       :series="series"
       :xAxis="xAxis"
     />
+
     <ul
       v-if="chart.de_refs != undefined"
       style="width: 100%; padding: 2rem;"

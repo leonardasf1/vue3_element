@@ -4,31 +4,36 @@
   import { ref, onMounted } from 'vue'
   import { useRoute } from 'vue-router'
 
+  import { req_APIv1, req_APIv0 } from '@/realizations/requires.ts'
+  import { getChartValues, Ichart, Ivalue } from '@/realizations/getChartValues.ts'
+  import { getSeries } from '@/realizations/getSeries.ts'
+
   import TabMenu from '@/components/TabMenu.vue'
   import List from '@/components/List.vue'
 
 // ---------------------------------
 
   const charts: Ref<Array<Ichart>> = ref([])
+
+  async function getCharts(): Promise<void> {
+    charts.value = await req_APIv1()
+
+    console.log(charts.value)
+  }
+
   const values: Ref<Array<Ivalue>> = ref([])
   const data_elements: Ref<Array<object>> = ref([])
 
-  async function req_APIv1() {
-    const res = await fetch("http://localhost:6006/APIv1/tabs")
-    .then(response => response.json())
-    charts.value = res
-  }
-  async function req_APIv0() {
-    const res = await fetch("http://localhost:6006/APIv0/data/1")
-    .then(response => response.json())
+  async function getValuesData(): Promise<void> {
+    const res = await req_APIv0()
     values.value = res.values
     data_elements.value = res.data_elements
+    console.log(values.value)
     transformator()
-
   }
   onMounted(() => {
-    req_APIv1()
-    req_APIv0().then(() => pathHandler())
+    getCharts()
+    getValuesData().then(() => pathHandler())
   })
 
 // ---------------------------------
@@ -39,98 +44,33 @@
     const path: any = route.path.split("/")[2]
     const block = route.query.tab
     if (path) {
-      handleC(charts.value[path - 1], block)
+      handleTabMenuClick(charts.value[path - 1], block)
     }
   }
 // ---------------------------------
 
   const legend: Ref = ref({ "data": [] }) // массив наименований отображаемых на графике показателей
   const xAxis:  Ref = ref({ "data": [] }) // объект, задающий массив временных значений по оси X
-  const series:  Ref = ref([]) // массив значений по оси Y для каждой из линий на графике
+  const series: Ref = ref([]) // массив значений по оси Y для каждой из линий на графике
 
   function transformator(): void {
 
     values.value.forEach(( value: Ivalue ) => {
       xAxis.value.data.push( value.timepoint )
     })
-
-    let i = 0
-    const serieS: Array<Iseries> = []
+    series.value = getSeries(values.value, data_elements.value)
 
     data_elements.value.forEach(( element_data: any ) => {
       legend.value.data.push( element_data.name )
-
-      values.value.forEach(( value: Ivalue ) => {
-        for ( let v_at of value.values_at_timepoint ) {
-          if ( v_at.id == element_data.id ) {
-            if ( !serieS[i] || serieS[i].name !== element_data.name ) {
-              serieS.push({
-                "name": element_data.name,
-                "data": []
-              })
-            }
-            serieS[i].data.push( v_at.value )
-            break
-          }
-        }
-      })
-      i++
     })
-    series.value = serieS
   }
 
 // ---------------------------------
 
   const chart: Ref = ref({}) // объект, задающий массив значений по оси Y для каждой из линий на графике
 
-  interface Ichart {
-    id: string
-    name: string
-    description?: string
-    de_refs: [
-      {
-        id: string
-        name: string
-        description?: string
-        values: number[]
-      }
-    ]
-  }
-  interface Ivalue {
-    timepoint: number
-    values_at_timepoint: [
-      {
-        id: string
-        value: number
-      }
-    ]
-  }
-  interface Iseries {
-    name: string
-    data: number[]
-  }
-  function handleC( tab: Ichart, block?: any): void {
-    const charT: Ichart = tab
-
-    for ( let de_ref of charT.de_refs ) {
-      de_ref.values = []
-
-      values.value.forEach(( value: Ivalue ) => {
-
-        for ( let v_at of value.values_at_timepoint ) {
-          if ( v_at.id == de_ref.id ) {
-            de_ref.values.push( v_at.value )
-            break
-          }
-        }
-      })
-    }
-    chart.value = {
-      "id": charT.id,
-      "name": charT.name,
-      "description": charT.description,
-      "de_refs": block ? new Array(charT.de_refs[block - 1]) : charT.de_refs
-    }
+  function handleTabMenuClick(tab: any, block?: any): void {
+    chart.value = getChartValues(values.value, tab, block)
   }
 
 </script>
@@ -140,7 +80,7 @@
     <div class="">
       <tab-menu
         :charts="charts"
-        :handleC="handleC"
+        :handleC="handleTabMenuClick"
       />
     </div>
 

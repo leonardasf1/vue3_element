@@ -19,6 +19,7 @@
 
   const styleClose = { transform: "rotateZ(90deg)" }
   const styleOpen = { transform: "rotateZ(-90deg)" }
+  
 </script>
 
 <template>
@@ -38,6 +39,7 @@
         <icon-arrow :style="styleClose" />
       </el-radio-button>
     </el-radio-group>
+
     <el-sub-menu
       v-for="(tab, tabIndex) in charts"
       :index="tab.id+'1'"
@@ -46,12 +48,15 @@
         <el-icon><icon-menu /></el-icon>
         <span> {{tab.name}} </span>
       </template>
+
       <el-menu-item
         v-for="(de_ref, deIndex) in tab.de_refs"
         :index="de_ref.id+'2'"
         @click="handleC(tab, deIndex + 1)"
       > {{de_ref.name}} </el-menu-item>
+
     </el-sub-menu>
+
   </el-menu>
 </template>
 
