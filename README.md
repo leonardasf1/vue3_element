@@ -22,7 +22,6 @@ This template should help get you started developing with Vue 3 and TypeScript i
 ```
 npm install
 ```
-- then check - [vue-ln.web.app](https://vue-ln.web.app/)
 
  Compiles and hot-reloads for development
 ```
