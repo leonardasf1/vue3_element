@@ -3,27 +3,27 @@ export interface Ivalue {
   timepoint: number
   values_at_timepoint: [
     {
-      id: string
+      id: number
       value: number
     }
   ]
 }
 
 export interface Ichart {
-  id: string
+  id: number
   name: string
-  description?: string
+  description: string | undefined
   de_refs: [
     {
-      id: string
+      id: number
       name: string
-      description?: string
+      description: string | undefined
       values: number[]
     }
   ]
 }
 
-export function getChartValues(values: Array<Ivalue>, tab: Ichart, block?: any): Ichart {
+export function getChartValues(values: Array<Ivalue>, tab: Ichart, block?: any) {
   const charT: Ichart = tab
 
   for ( let de_ref of charT.de_refs ) {
@@ -39,10 +39,11 @@ export function getChartValues(values: Array<Ivalue>, tab: Ichart, block?: any):
       }
     })
   }
-  return {
+  const chart = {
     "id": charT.id,
     "name": charT.name,
     "description": charT.description,
     "de_refs": block ? new Array(charT.de_refs[block - 1]) : charT.de_refs,
   }
+  return chart
 }

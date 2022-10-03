@@ -1,6 +1,6 @@
 import { Ivalue } from './getChartValues'
 
-export interface Iseries {
+interface Iseries {
   name: string
   data: number[]
 }

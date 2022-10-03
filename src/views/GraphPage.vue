@@ -5,7 +5,7 @@
   import { useRoute } from 'vue-router'
 
   import { req_APIv1, req_APIv0 } from '../realizations/requires'
-  import { getChartValues, Ichart, Ivalue } from '../realizations/getChartValues'
+  import { getChartValues, Ivalue } from '../realizations/getChartValues'
   import { getSeries } from '../realizations/getSeries'
 
   import TabMenu from '@/components/TabMenu.vue'
@@ -13,15 +13,15 @@
 
 // ---------------------------------
 
-  const charts: Ref<Array<Ichart>> = ref([])
+  const charts: Ref = ref([])
 
   async function getCharts(): Promise<void> {
     const res = await req_APIv1()
     charts.value = res
   }
 
-  const values: Ref<Array<Ivalue>> = ref([])
-  const data_elements: Ref<Array<object>> = ref([])
+  const values: Ref = ref([])
+  const data_elements: Ref = ref([])
 
   async function getValuesData(): Promise<void> {
     const res = await req_APIv0()
@@ -34,18 +34,7 @@
     getValuesData().then(() => pathHandler())
   })
 
-// ---------------------------------
-
-  const route = useRoute()
-
-  function pathHandler() :void {
-    const path: any = route.path.split("/")[2]
-    const block = route.query.tab
-    if (path) {
-      handleTabMenuClick(charts.value[path - 1], block)
-    }
-  }
-// ---------------------------------
+  // ---------------------------------
 
   const legend: Ref = ref({ "data": [] }) // массив наименований отображаемых на графике показателей
   const xAxis:  Ref = ref({ "data": [] }) // объект, задающий массив временных значений по оси X
@@ -61,6 +50,17 @@
     data_elements.value.forEach(( element_data: any ) => {
       legend.value.data.push( element_data.name )
     })
+  }
+// ---------------------------------
+
+  const route = useRoute()
+
+  function pathHandler() :void {
+    const path: any = route.path.split("/")[2]
+    const block = route.query.tab
+    if (path) {
+      handleTabMenuClick(charts.value[path - 1], block)
+    }
   }
 
 // ---------------------------------
