@@ -24,14 +24,20 @@
   const data_elements: Ref = ref([])
 
   async function getValuesData(): Promise<void> {
-    const res = await req_APIv0()
+    let res = await req_APIv0()
     values.value = res.values
+    
+    setInterval(async () => {
+      res = await req_APIv0()
+      values.value = res.values
+    }, 3000)
+
     data_elements.value = res.data_elements
     transformator()
   }
   onMounted(() => {
     getCharts()
-    getValuesData().then(() => pathHandler())
+    getValuesData().then(() => {pathHandler()})
   })
 
   // ---------------------------------
@@ -50,6 +56,7 @@
     data_elements.value.forEach(( element_data: any ) => {
       legend.value.data.push( element_data.name )
     })
+    console.log(xAxis.value)
   }
 // ---------------------------------
 
@@ -59,7 +66,7 @@
     const path: any = route.path.split("/")[2]
     const block = route.query.tab
     if (path) {
-      handleTabMenuClick(charts.value[path - 1], block)
+      setChartValues(charts.value[path - 1], block)
     }
   }
 
@@ -67,7 +74,7 @@
 
   const chart: Ref = ref({}) // объект, задающий массив значений по оси Y для каждой из линий на графике
 
-  function handleTabMenuClick(tab: any, block?: any): void {
+  function setChartValues(tab: any, block?: any): void {
     chart.value = getChartValues(values.value, tab, block)
   }
 
@@ -78,7 +85,7 @@
     <div class="">
       <tab-menu
         :charts="charts"
-        :handleC="handleTabMenuClick"
+        :handleC="setChartValues"
       />
     </div>
 
