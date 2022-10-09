@@ -38,6 +38,8 @@
       </li>
     </ul>
 
+
+
     <h3>{{chart.description}}</h3>
 
 </template>
@@ -56,9 +58,14 @@
   }
   .time_values {
     display: flex;
+    justify-content: center;
 
     > ul {
       padding: 2rem;
+
+      * {
+        line-height: 36px;
+      }
     }
   }
 
