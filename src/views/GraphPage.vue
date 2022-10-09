@@ -26,7 +26,7 @@
   async function getValuesData(): Promise<void> {
     let res = await req_APIv0()
     values.value = res.values
-    
+
     setInterval(async () => {
       res = await req_APIv0()
       values.value = res.values
@@ -35,10 +35,11 @@
     data_elements.value = res.data_elements
     transformator()
   }
-  onMounted(() => {
+  onMounted( () => {
     getCharts()
-    getValuesData().then(() => {pathHandler()})
-  })
+    getValuesData().then( () => { pathHandler() } )
+    window.addEventListener('popstate', () => { pathHandler() })
+  } )
 
   // ---------------------------------
 
@@ -56,7 +57,6 @@
     data_elements.value.forEach(( element_data: any ) => {
       legend.value.data.push( element_data.name )
     })
-    console.log(xAxis.value)
   }
 // ---------------------------------
 

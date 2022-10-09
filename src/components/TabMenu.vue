@@ -19,7 +19,7 @@
 
   const styleClose = { transform: "rotateZ(90deg)" }
   const styleOpen = { transform: "rotateZ(-90deg)" }
-  
+
 </script>
 
 <template>
@@ -52,8 +52,14 @@
       <el-menu-item
         v-for="(de_ref, deIndex) in tab.de_refs"
         :index="de_ref.id+'2'"
-        @click="handleC(tab, deIndex + 1)"
-      > {{de_ref.name}} </el-menu-item>
+      >
+        <router-link
+          :to="'/graph/'+(tabIndex + 1)+'?tab='+(deIndex + 1)"
+          @click="handleC(tab, deIndex + 1)"
+        >
+          {{de_ref.name}}
+        </router-link>
+      </el-menu-item>
 
     </el-sub-menu>
 
@@ -84,5 +90,9 @@
   }
   .el-sub-menu__title span {
     padding-inline: 20px;
+  }
+  .el-menu-item a {
+    color: inherit;
+    text-decoration: none;
   }
 </style>
