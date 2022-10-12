@@ -34,3 +34,13 @@ npm run dev
 ```
 npm run build
 ```
+
+App (root component)
+├─ HeaderCom
+└─ RouterVue
+   ├─ AboutPage
+   └─ GraphPage
+      ├─ TabMenu
+      │  └─ IconArrow
+      └─ List
+         └─ Graph

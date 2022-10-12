@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
   import type { Ref } from 'vue'
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { useRoute } from 'vue-router'
 
   import { req_APIv1, req_APIv0 } from '../realizations/requires'
@@ -33,7 +33,7 @@
     }, 3000)
 
     data_elements.value = res.data_elements
-    transformator()
+    // transformator()
   }
   onMounted( () => {
     getCharts()
@@ -43,21 +43,36 @@
 
   // ---------------------------------
 
-  const legend: Ref = ref({ "data": [] }) // массив наименований отображаемых на графике показателей
-  const xAxis:  Ref = ref({ "data": [] }) // объект, задающий массив временных значений по оси X
-  const series: Ref = ref([]) // массив значений по оси Y для каждой из линий на графике
+  // const legend: Ref = ref({ "data": [] })
 
-  function transformator(): void {
-
-    values.value.forEach(( value: Ivalue ) => {
-      xAxis.value.data.push( value.timepoint )
-    })
-    series.value = getSeries(values.value, data_elements.value)
-
-    data_elements.value.forEach(( element_data: any ) => {
-      legend.value.data.push( element_data.name )
-    })
-  }
+// объект, задающий массив временных значений по оси X
+  const xAxis = computed(() => {
+    return {
+      "data": values.value.map(
+        ( value: Ivalue ) => value.timepoint
+      )
+    }
+  })
+// массив значений по оси Y для каждой из линий на графике
+  const series = computed(() => {
+    return getSeries(values.value, data_elements.value)
+  })
+// массив наименований отображаемых на графике показателей
+  const legend = computed(() => {
+    return {
+      "data": data_elements.value.map(
+        ( element_data: any ) => element_data.name
+      )
+    }
+  })
+  // function transformator(): void {
+  //
+  //   // series.value = getSeries(values.value, data_elements.value)
+  //
+  //   data_elements.value.forEach(( element_data: any ) => {
+  //     legend.value.data.push( element_data.name )
+  //   })
+  // }
 // ---------------------------------
 
   const route = useRoute()
