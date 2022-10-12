@@ -35,6 +35,7 @@ npm run dev
 npm run build
 ```
 
+```
 App (root component)
 ├─ HeaderCom
 └─ RouterVue
@@ -44,3 +45,4 @@ App (root component)
       │  └─ IconArrow
       └─ List
          └─ Graph
+```

@@ -33,7 +33,6 @@
     }, 3000)
 
     data_elements.value = res.data_elements
-    // transformator()
   }
   onMounted( () => {
     getCharts()
@@ -41,9 +40,7 @@
     window.addEventListener('popstate', () => { pathHandler() })
   } )
 
-  // ---------------------------------
-
-  // const legend: Ref = ref({ "data": [] })
+// ---------------------------------
 
 // объект, задающий массив временных значений по оси X
   const xAxis = computed(() => {
@@ -53,10 +50,12 @@
       )
     }
   })
+
 // массив значений по оси Y для каждой из линий на графике
   const series = computed(() => {
     return getSeries(values.value, data_elements.value)
   })
+
 // массив наименований отображаемых на графике показателей
   const legend = computed(() => {
     return {
@@ -65,14 +64,6 @@
       )
     }
   })
-  // function transformator(): void {
-  //
-  //   // series.value = getSeries(values.value, data_elements.value)
-  //
-  //   data_elements.value.forEach(( element_data: any ) => {
-  //     legend.value.data.push( element_data.name )
-  //   })
-  // }
 // ---------------------------------
 
   const route = useRoute()
